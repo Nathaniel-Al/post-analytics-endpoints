@@ -1,10 +1,14 @@
+import os
 import hmac
 from collections import defaultdict
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-EMAIL = "25ds3000071@ds.study.iitm.ac.in"
-API_KEY = "ak_fzd6yrp8k1nco3phy9rbtaxn"
+EMAIL = os.environ.get("EXAM_EMAIL", "25ds3000071@ds.study.iitm.ac.in")
+API_KEY = os.environ.get("API_KEY")
+if not API_KEY:
+    # Fail loudly at startup rather than run with no key configured.
+    raise RuntimeError("API_KEY environment variable is not set")
 
 app = FastAPI()
 app.add_middleware(
